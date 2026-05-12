@@ -24,3 +24,11 @@ apparmor_pujol_install_apt_repo_state: present
 apparmor_pujol_install_apt_repo_key: https://pkg.pujol.io/debian/gpgkey
 apparmor_pujol_install_apt_repo_url: https://pkg.pujol.io/debian/repo
 apparmor_pujol_install_apt_repo_suites: trixie
+apparmor_pujol_config_xdg_desktop_dir:
+apparmor_pujol_config_xdg_download_dir:
+apparmor_pujol_config_xdg_templates_dir:
+apparmor_pujol_config_xdg_publicshare_dir:
+apparmor_pujol_config_xdg_documents_dir:
+apparmor_pujol_config_xdg_music_dir:
+apparmor_pujol_config_xdg_pictures_dir:
+apparmor_pujol_config_xdg_videos_dir:

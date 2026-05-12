@@ -1,9 +1,10 @@
 ---
+# repo
 - when: apparmor_pujol_install_apt_repo_state == "present"
   block:
 
   # mkdir
-  - name: Create keyring directory
+  - name: Mkdir {{ apparmor_install_apt_key_dir }}
     become: true
     ansible.builtin.file:
       path: "{{ apparmor_install_apt_key_dir }}"
@@ -11,7 +12,7 @@
       mode: 0755
 
   # download key
-  - name: Download GPG key (keep it armored)
+  - name: Download GPG key to {{ apparmor_install_apt_key_dir }}/roddhjav.gpg
     become: true
     ansible.builtin.get_url:
       url: "{{ apparmor_pujol_install_apt_repo_key }}"
@@ -53,3 +54,23 @@
   ansible.builtin.apt:
     state: "{{ apparmor_pujol_install_apt_state }}"
     name: apparmor.d
+
+# config
+- when: apparmor_pujol_install_apt_state == "present" or apparmor_pujol_install_apt_state == "latest"
+  block:
+  
+  # mkdir
+  - name: Mkdir /etc/apparmor.d/tunables/xdg-user-dirs.d/apparmor.d.d
+    become: true
+    ansible.builtin.file:
+      path: /etc/apparmor.d/tunables/xdg-user-dirs.d/apparmor.d.d
+      state: directory
+      mode: u=rw,g=r,o=r
+  
+  # template
+  - name: Template pujol/tunables.xdg-user-dirs.site.local.j2
+    become: true
+    ansible.builtin.template:
+      src: pujol/tunables.xdg-user-dirs.site.local.j2
+      dest: /etc/apparmor.d/tunables/xdg-user-dirs.d/apparmor.d.d/site.local
+      mode: u=rw,g=r,o=r
