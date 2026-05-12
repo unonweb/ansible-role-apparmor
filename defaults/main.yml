@@ -1,0 +1,26 @@
+---
+apparmor_install_apt_state: present
+apparmor_install_apt_packages:
+- apparmor
+- apparmor-utils
+- apparmor-notify
+#- apparmor-profiles
+#- apparmor-profiles-extra
+apparmor_install_apt_key_dir: /etc/apt/keyrings
+# parser config
+apparmor_config_parser_src: parser.pujol.conf
+apparmor_config_parser_dst: /etc/apparmor/parser.conf
+# logprof config
+apparmor_config_logprof_src:
+apparmor_config_logprof_dst: /etc/apparmor/logprof.conf
+# notify config
+apparmor_config_notify_src:
+apparmor_config_notify_dst: /etc/apparmor/notify.conf
+# rules
+apparmor_rules: []
+# pujol
+apparmor_pujol_install_apt_state: present
+apparmor_pujol_install_apt_repo_state: present
+apparmor_pujol_install_apt_repo_key: https://pkg.pujol.io/debian/gpgkey
+apparmor_pujol_install_apt_repo_url: https://pkg.pujol.io/debian/repo
+apparmor_pujol_install_apt_repo_suites: trixie

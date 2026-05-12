@@ -1,0 +1,7 @@
+---
+# apt
+- name: Install {{ apparmor_install_apt_packages }}
+  become: true
+  ansible.builtin.apt:
+    state: "{{ apparmor_install_apt_state }}"
+    name: "{{ apparmor_install_apt_packages }}"
