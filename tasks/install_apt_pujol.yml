@@ -1,5 +1,5 @@
 ---
-# repo
+# apt_repo_state == "present"
 - when: apparmor_pujol_install_apt_repo_state == "present"
   block:
 
@@ -39,8 +39,9 @@
     ansible.builtin.apt:
       update_cache: true
 
-# remove repo
+# apt_repo_state == "absent"
 - when: apparmor_pujol_install_apt_repo_state == "absent"
+  become: true
   loop:
   - "{{ apparmor_install_apt_key_dir }}/roddhjav.gpg"
   - /etc/apt/sources.list.d/roddhjav.sources
@@ -48,13 +49,23 @@
     path: "{{ item }}"
     state: absent
 
-# install
-- name: Install apparmor.d
+# apt_state == "absent"
+- when: apparmor_pujol_install_apt_state == "absent" 
+  name: Apt install apparmor.d
   become: true
   ansible.builtin.apt:
-    state: "{{ apparmor_pujol_install_apt_state }}"
+    state: absent
     name: apparmor.d
+    purge: true
 
+# apt_state == "present"
+- when: apparmor_pujol_install_apt_state == "present"
+  name: Apt remove apparmor.d
+  become: true
+  ansible.builtin.apt:
+    state: present
+    name: apparmor.d
+    
 # config
 - when: apparmor_pujol_install_apt_state == "present" or apparmor_pujol_install_apt_state == "latest"
   block:
