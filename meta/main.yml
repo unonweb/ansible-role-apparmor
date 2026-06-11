@@ -1,0 +1,28 @@
+---
+argument_specs:
+  main:
+    options:
+      apparmor_install_apt_state:
+        required: true
+        type: str
+        choices:
+        - present
+        - absent
+        - latest
+      apparmor_install_apt_packages:
+        type: list
+        required: true
+        elements: str
+        choices:
+        - apparmor
+        - apparmor-utils
+        - apparmor-notify
+        - apparmor-profiles
+        - apparmor-profiles-extra
+      apparmor_install_apt_key_dir:
+        type: str
+        required: true
+      apparmor_rules:
+        type: list
+        elements: str
+        required: false
