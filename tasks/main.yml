@@ -1,10 +1,9 @@
 ---
 - name: apparmor role
-  tags:
-    - apparmor
+  tags: [role-apparmor]
   block:
 
   # apt
-  - ansible.builtin.import_tasks: install_apt.yml
+  - ansible.builtin.import_tasks: apparmor-install.yml
   # config
-  - ansible.builtin.import_tasks: config.yml
+  - ansible.builtin.import_tasks: apparmor-config.yml
