@@ -1,2 +1,2 @@
-files/systemd-nspawn-hardened-claude
-files/systemd-nspawn-hardened-gemini
+files/profiles/systemd-nspawn-hardened-claude
+files/profiles/systemd-nspawn-hardened-gemini

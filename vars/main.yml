@@ -1,0 +1,4 @@
+---
+__apparmor_config_parser_dst: /etc/apparmor/parser.conf
+__apparmor_config_logprof_dst: /etc/apparmor/logprof.conf
+__apparmor_config_notify_dst: /etc/apparmor/notify.conf

@@ -1,0 +1,13 @@
+---
+- tags: [role-apparmor-profiles]
+  block:
+
+  - name: Copy profiles to /etc/apparmor.d
+    ansible.builtin.template:
+      src: "profiles/{{ item }}"
+      dest: "/etc/apparmor.d/{{ item }}"
+      owner: root
+      group: root
+      mode: '0644'
+    loop: "{{ apparmor_profiles }}"
+    notify: Reload apparmor.service

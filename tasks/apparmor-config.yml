@@ -3,31 +3,31 @@
   block:
       
   # copy parser config
-  - when: apparmor_config_parser_src != None
-    name: Copy {{ apparmor_config_parser_src }} -> {{ apparmor_config_parser_dst }}
+  - when: apparmor_config_parser_src | length > 0
+    name: Copy {{ apparmor_config_parser_src }} -> {{ __apparmor_config_parser_dst }}
     ansible.builtin.copy:
       src: "{{ apparmor_config_parser_src }}"
-      dest: "{{ apparmor_config_parser_dst }}"
+      dest: "{{ __apparmor_config_parser_dst }}"
       owner: root
       group: root
       mode: u=rw,g=r,o=r
 
   # copy parser config
-  - when: apparmor_config_logprof_src != None
-    name: Copy {{ apparmor_config_logprof_src }} -> {{ apparmor_config_logprof_dst }}
+  - when: apparmor_config_logprof_src | length > 0
+    name: Copy {{ apparmor_config_logprof_src }} -> {{ __apparmor_config_logprof_dst }}
     ansible.builtin.copy:
       src: "{{ apparmor_config_logprof_src }}"
-      dest: "{{ apparmor_config_logprof_dst }}"
+      dest: "{{ __apparmor_config_logprof_dst }}"
       owner: root
       group: root
       mode: u=rw,g=r,o=r
 
   # copy parser config
-  - when: apparmor_config_notify_src != None
-    name: Copy {{ apparmor_config_notify_src }} -> {{ apparmor_config_notify_dst }}
+  - when: apparmor_config_notify_src | length > 0
+    name: Copy {{ apparmor_config_notify_src }} -> {{ __apparmor_config_notify_dst }}
     ansible.builtin.copy:
       src: "{{ apparmor_config_notify_src }}"
-      dest: "{{ apparmor_config_notify_dst }}"
+      dest: "{{ __apparmor_config_notify_dst }}"
       owner: root
       group: root
       mode: u=rw,g=r,o=r
