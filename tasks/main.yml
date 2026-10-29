@@ -7,3 +7,5 @@
   - ansible.builtin.import_tasks: apparmor-install.yml
   # config
   - ansible.builtin.import_tasks: apparmor-config.yml
+  # profiles
+  - ansible.builtin.import_tasks: apparmor-profiles.yml
