@@ -3,7 +3,7 @@
   block:
 
   - name: Copy profiles to /etc/apparmor.d
-    ansible.builtin.template:
+    ansible.builtin.copy:
       src: "profiles/{{ item }}"
       dest: "/etc/apparmor.d/{{ item | basename }}"
       owner: root
