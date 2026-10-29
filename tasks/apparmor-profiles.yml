@@ -5,7 +5,7 @@
   - name: Copy profiles to /etc/apparmor.d
     ansible.builtin.template:
       src: "profiles/{{ item }}"
-      dest: "/etc/apparmor.d/{{ item }}"
+      dest: "/etc/apparmor.d/{{ item | basename }}"
       owner: root
       group: root
       mode: '0644'
