@@ -1,0 +1,86 @@
+# AppArmor profile for sdme systemd-nspawn containers.
+#
+# This profile confines containers started with:
+#   sdme create --name mybox --apparmor-profile sdme-default
+#   sdme create --name mybox --strict
+#
+# Install:
+#   sdme config apparmor-profile > /etc/apparmor.d/sdme-default
+#   apparmor_parser -r /etc/apparmor.d/sdme-default
+#
+# The profile is applied via AppArmorProfile= in the systemd service
+# unit drop-in, confining the nspawn process and all its children.
+
+abi <abi/4.0>,
+
+include <tunables/global>
+
+profile sdme-default flags=(attach_disconnected,mediate_deleted) {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+
+  # Allow most filesystem operations inside the container's overlayfs.
+  # The container has its own mount namespace so these are scoped.
+  / r,
+  /** rwlkix,
+
+  # Allow mount/umount inside the container's mount namespace.
+  # Required for systemd to set up /proc, /sys, tmpfs mounts at boot.
+  mount,
+  umount,
+  pivot_root,
+
+  # Allow signal delivery within the container.
+  signal,
+
+  # Allow ptrace within the container (for systemd-logind, etc.).
+  # --strict drops CAP_SYS_PTRACE so this is capability-gated.
+  ptrace,
+
+  # Allow unix socket communication (D-Bus, journald, etc.).
+  unix,
+
+  # Allow network operations (scoped by network namespace).
+  network,
+
+  # Deny writes to /proc and /sys that could affect the host.
+  # nspawn already mounts most of these read-only, but this adds
+  # MAC-level enforcement.
+  deny /proc/sys/kernel/modprobe w,
+  deny /proc/sys/kernel/core_pattern w,
+  deny /proc/sys/kernel/hostname w,
+  deny /proc/sys/kernel/domainname w,
+  deny /proc/sys/kernel/shmmax w,
+  deny /proc/sysrq-trigger w,
+  deny /proc/kcore r,
+
+  # Deny access to host hardware and raw devices.
+  deny /dev/sd* rw,
+  deny /dev/nvme* rw,
+  deny /dev/vd* rw,
+  deny /dev/loop* rw,
+  deny /dev/mem rw,
+  deny /dev/kmem rw,
+  deny /dev/port rw,
+
+  # Deny loading kernel modules.
+  deny /lib/modules/** w,
+  deny /usr/lib/modules/** w,
+
+  # Allow reading /proc and /sys for systemd and monitoring.
+  @{PROC}/** r,
+  @{sys}/** r,
+
+  # Allow dbus communication.
+  dbus,
+
+  # Allow user namespace creation and transitions.
+  # Required for --userns / --hardened / --strict containers
+  # (systemd-nspawn uses user namespaces for UID/GID mapping).
+  userns,
+
+  # Capabilities: allow the set that nspawn grants.
+  # Individual capabilities are further restricted by the bounding set
+  # configured via --drop-capability / --strict / --hardened.
+  capability,
+}
