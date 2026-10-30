@@ -21,7 +21,8 @@ profile systemd-nspawn-sdme-default flags=(attach_disconnected,mediate_deleted) 
 
   # Allow most filesystem operations inside the container's overlayfs.
   # The container has its own mount namespace so these are scoped.
-  / r,
+  # Allow root directory mapping and access
+  / rwl,
   /** rwlkix,
 
   # Allow mount/umount inside the container's mount namespace.
@@ -33,9 +34,10 @@ profile systemd-nspawn-sdme-default flags=(attach_disconnected,mediate_deleted) 
   # Allow signal delivery within the container.
   signal,
 
-  # Allow ptrace within the container (for systemd-logind, etc.).
-  # --strict drops CAP_SYS_PTRACE so this is capability-gated.
+  # Allow ptrace within the container (for systemd-logind, etc.)
   ptrace,
+  # Replace global 'ptrace,' with self-only tracing:
+  # ptrace (trace) peer=@{profile_name},
 
   # Allow unix socket communication (D-Bus, journald, etc.).
   unix,
